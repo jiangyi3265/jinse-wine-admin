@@ -1,8 +1,8 @@
 {
-  "name": "ruoyi",
+  "name": "jinse-wine-admin",
   "version": "3.9.1",
-  "description": "若依管理系统",
-  "author": "若依",
+  "description": "金色酒业管理后台",
+  "author": "金色酒业",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -23,6 +23,7 @@
     "clipboard": "2.0.11",
     "echarts": "5.6.0",
     "element-plus": "2.13.1",
+    "exceljs": "^4.4.0",
     "file-saver": "2.0.5",
     "fuse.js": "7.1.0",
     "js-beautify": "1.15.4",

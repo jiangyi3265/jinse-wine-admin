@@ -116,7 +116,7 @@
                <el-input v-model="form.postName" placeholder="请输入岗位名称" />
             </el-form-item>
             <el-form-item label="岗位编码" prop="postCode">
-               <el-input v-model="form.postCode" placeholder="请输入编码名称" />
+               <el-input :model-value="form.postCode" readonly placeholder="保存后由系统自动生成" />
             </el-form-item>
             <el-form-item label="岗位顺序" prop="postSort">
                <el-input-number v-model="form.postSort" controls-position="right" :min="0" />
@@ -170,9 +170,8 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    postName: [{ required: true, message: "岗位名称不能为空", trigger: "blur" }],
-    postCode: [{ required: true, message: "岗位编码不能为空", trigger: "blur" }],
-    postSort: [{ required: true, message: "岗位顺序不能为空", trigger: "blur" }],
+    postName: [{ required: true, message: "请输入岗位名称", trigger: "blur" }],
+    postSort: [{ required: true, message: "请输入岗位顺序", trigger: "blur" }],
   }
 })
 

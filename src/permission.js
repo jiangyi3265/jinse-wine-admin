@@ -20,16 +20,22 @@ const isWhiteList = (path) => {
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
+    if (/^\/business\/(content|miniContent)(\/|$)/.test(to.path)) {
+      next({ path: '/index', replace: true })
+      NProgress.done()
+      return
+    }
     to.meta.title && useSettingsStore().setTitle(to.meta.title)
     /* has token*/
     if (to.path === '/login') {
-      next({ path: '/' })
+      next({ path: '/index' })
       NProgress.done()
     } else if (isWhiteList(to.path)) {
       next()
     } else {
       if (useUserStore().roles.length === 0) {
         isRelogin.show = true
+        isRelogin.token = getToken() || ''
         // 判断当前用户是否已拉取完user_info信息
         useUserStore().getInfo().then(() => {
           isRelogin.show = false
@@ -44,8 +50,8 @@ router.beforeEach((to, from, next) => {
           })
         }).catch(err => {
           useUserStore().logOut().then(() => {
-            ElMessage.error(err)
-            next({ path: '/' })
+            if (err?.code !== 401) ElMessage.error(err?.message || '用户信息加载失败')
+            next({ path: '/login', query: { redirect: to.fullPath } })
           })
         })
       } else {

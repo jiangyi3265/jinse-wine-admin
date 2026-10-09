@@ -256,6 +256,8 @@ async function toggleTheme(event) {
           bottom: 10px;
           font-size: 14px;
           font-weight: bold;
+          white-space: nowrap;
+          display: inline-block;
         }
 
         i {
@@ -267,6 +269,16 @@ async function toggleTheme(event) {
         }
       }
     }
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar .right-menu .avatar-container .avatar-wrapper .user-nickname {
+    display: none !important;
+  }
+
+  .navbar .right-menu .avatar-container .avatar-wrapper {
+    margin-right: 4px;
   }
 }
 </style>

@@ -313,9 +313,9 @@ const data = reactive({
     visible: undefined
   },
   rules: {
-    menuName: [{ required: true, message: "菜单名称不能为空", trigger: "blur" }],
-    orderNum: [{ required: true, message: "菜单顺序不能为空", trigger: "blur" }],
-    path: [{ required: true, message: "路由地址不能为空", trigger: "blur" }]
+    menuName: [{ required: true, message: "请输入菜单名称", trigger: "blur" }],
+    orderNum: [{ required: true, message: "请输入显示排序", trigger: "blur" }],
+    path: [{ required: true, message: "请输入路由地址", trigger: "blur" }]
   },
 })
 

@@ -184,8 +184,8 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    noticeTitle: [{ required: true, message: "公告标题不能为空", trigger: "blur" }],
-    noticeType: [{ required: true, message: "公告类型不能为空", trigger: "change" }]
+    noticeTitle: [{ required: true, message: "请输入公告标题", trigger: "blur" }],
+    noticeType: [{ required: true, message: "请选择公告类型", trigger: "change" }]
   },
 })
 

@@ -76,6 +76,28 @@
       white-space: nowrap !important;
     }
 
+    // The sidebar root uses a zero font size to remove inline whitespace.
+    // Give collapsed menu icons explicit dimensions so they remain visible
+    // when the text labels are hidden by Element Plus.
+    .el-menu--collapse {
+      .el-sub-menu__title,
+      .el-menu-item {
+        justify-content: center;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+
+      .svg-icon {
+        width: 19px !important;
+        height: 19px !important;
+        margin: 0 !important;
+      }
+
+      .el-sub-menu__icon-arrow {
+        display: none;
+      }
+    }
+
     .el-menu-item .el-menu-tooltip__trigger {
       display: inline-block !important;
     }

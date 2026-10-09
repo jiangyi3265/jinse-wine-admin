@@ -215,9 +215,9 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    dictLabel: [{ required: true, message: "数据标签不能为空", trigger: "blur" }],
-    dictValue: [{ required: true, message: "数据键值不能为空", trigger: "blur" }],
-    dictSort: [{ required: true, message: "数据顺序不能为空", trigger: "blur" }]
+    dictLabel: [{ required: true, message: "请输入数据标签", trigger: "blur" }],
+    dictValue: [{ required: true, message: "请输入数据键值", trigger: "blur" }],
+    dictSort: [{ required: true, message: "请输入显示排序", trigger: "blur" }]
   }
 })
 

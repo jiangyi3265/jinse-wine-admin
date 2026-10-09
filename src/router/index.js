@@ -61,7 +61,8 @@ export const constantRoutes = [
     path: '',
     component: Layout,
     redirect: '/index',
-    hidden: true,
+    // 首页是所有已登录人员的公共入口，业务内容在首页内部按权限过滤。
+    hidden: false,
     children: [
       {
         path: '/index',

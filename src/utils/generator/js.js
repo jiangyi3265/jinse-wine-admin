@@ -135,10 +135,11 @@ function buildRules(conf, ruleList) {
   if (trigger[conf.tag]) {
     if (conf.required) {
       const type = Array.isArray(conf.defaultValue) ? "type: 'array'," : ''
-      let message = Array.isArray(conf.defaultValue)
-        ? `请至少选择一个${conf.vModel}`
-        : conf.placeholder
-      if (message === undefined) message = `${conf.label}不能为空`
+      const message = Array.isArray(conf.defaultValue)
+        ? `请至少选择一个${conf.label}`
+        : ['el-select', 'el-cascader', 'el-radio-group', 'el-checkbox-group', 'el-date-picker', 'el-time-picker'].includes(conf.tag)
+          ? `请选择${conf.label}`
+          : `请输入${conf.label}`
       rules.push(
         `{ required: true, ${type} message: '${message}', trigger: '${
           trigger[conf.tag]

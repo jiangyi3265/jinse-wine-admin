@@ -207,8 +207,8 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    dictName: [{ required: true, message: "字典名称不能为空", trigger: "blur" }],
-    dictType: [{ required: true, message: "字典类型不能为空", trigger: "blur" }]
+    dictName: [{ required: true, message: "请输入字典名称", trigger: "blur" }],
+    dictType: [{ required: true, message: "请输入字典类型", trigger: "blur" }]
   },
 })
 

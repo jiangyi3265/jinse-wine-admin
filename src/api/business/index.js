@@ -3,6 +3,10 @@ import request from '@/utils/request'
 // 管理端统一沿用若依的分页与响应格式；业务实体名称由页面配置集中指定。
 const resourceUrl = resource => `/business/${resource}`
 
+export function businessOptions(owner, field, params) {
+  return request({ url: `/business/options/${owner}/${field}`, method: 'get', params })
+}
+
 export function listBusiness(resource, params) {
   return request({ url: `${resourceUrl(resource)}/list`, method: 'get', params })
 }
@@ -25,6 +29,14 @@ export function removeBusiness(resource, id) {
 
 export function updateBusinessStatus(resource, id, data) {
   return request({ url: `${resourceUrl(resource)}/${id}/status`, method: 'put', data })
+}
+
+export function updateOrderDelivery(id, data) {
+  return request({ url: `/business/order/${id}/delivery`, method: 'put', data })
+}
+
+export function getDeliveryCompanies() {
+  return request({ url: '/business/order/delivery-companies', method: 'get' })
 }
 
 export function getBrandConfig() {

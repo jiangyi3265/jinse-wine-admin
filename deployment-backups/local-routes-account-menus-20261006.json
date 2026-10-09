@@ -1,0 +1,202 @@
+[
+  {
+    "name": "Business",
+    "path": "/business",
+    "hidden": false,
+    "redirect": "noRedirect",
+    "component": "Layout",
+    "alwaysShow": true,
+    "meta": {
+      "title": "业务管理",
+      "icon": "shopping",
+      "noCache": false,
+      "link": null
+    },
+    "children": [
+      {
+        "name": "BusinessProduct",
+        "path": "product",
+        "hidden": false,
+        "component": "business/product/index",
+        "meta": {
+          "title": "商品管理",
+          "icon": "product",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessStore",
+        "path": "store",
+        "hidden": false,
+        "component": "business/store/index",
+        "meta": {
+          "title": "门店管理",
+          "icon": "tree-table",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessCoupon",
+        "path": "coupon",
+        "hidden": false,
+        "component": "business/coupon/index",
+        "meta": {
+          "title": "优惠券模板",
+          "icon": "discount",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessExchange",
+        "path": "exchange",
+        "hidden": false,
+        "component": "business/exchange/index",
+        "meta": {
+          "title": "积分兑换",
+          "icon": "money",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessOrder",
+        "path": "order",
+        "hidden": false,
+        "component": "business/order/index",
+        "meta": {
+          "title": "订单管理",
+          "icon": "shopping",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessMember",
+        "path": "member",
+        "hidden": false,
+        "component": "business/member/index",
+        "meta": {
+          "title": "会员管理",
+          "icon": "user",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessReward",
+        "path": "reward",
+        "hidden": false,
+        "component": "business/reward/index",
+        "meta": {
+          "title": "奖品权益",
+          "icon": "gift",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessRedemption",
+        "path": "redemption",
+        "hidden": false,
+        "component": "business/redemption/index",
+        "meta": {
+          "title": "核销记录",
+          "icon": "documentation",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessBrand",
+        "path": "brand",
+        "hidden": false,
+        "component": "business/brand/index",
+        "meta": {
+          "title": "品牌配置",
+          "icon": "edit",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessContent",
+        "path": "content",
+        "hidden": false,
+        "component": "business/content/index",
+        "meta": {
+          "title": "小程序内容",
+          "icon": "documentation",
+          "noCache": false,
+          "link": null
+        }
+      },
+      {
+        "name": "BusinessOperations",
+        "path": "operations",
+        "hidden": false,
+        "component": "business/operations/index",
+        "meta": {
+          "title": "运营中心",
+          "icon": "data-analysis",
+          "noCache": false,
+          "link": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "System",
+    "path": "/system",
+    "hidden": false,
+    "redirect": "noRedirect",
+    "component": "Layout",
+    "alwaysShow": true,
+    "meta": {
+      "title": "账号与权限",
+      "icon": "system",
+      "noCache": true,
+      "link": null
+    },
+    "children": [
+      {
+        "name": "User",
+        "path": "user",
+        "hidden": false,
+        "component": "system/user/index",
+        "meta": {
+          "title": "后台账号",
+          "icon": "user",
+          "noCache": true,
+          "link": null
+        }
+      },
+      {
+        "name": "Role",
+        "path": "role",
+        "hidden": false,
+        "component": "system/role/index",
+        "meta": {
+          "title": "角色管理",
+          "icon": "peoples",
+          "noCache": true,
+          "link": null
+        }
+      },
+      {
+        "name": "Dept",
+        "path": "dept",
+        "hidden": false,
+        "component": "system/dept/index",
+        "meta": {
+          "title": "部门管理",
+          "icon": "tree",
+          "noCache": true,
+          "link": null
+        }
+      }
+    ]
+  }
+]

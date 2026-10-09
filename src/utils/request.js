@@ -9,7 +9,7 @@ import useUserStore from '@/store/modules/user'
 
 let downloadLoadingInstance
 // 是否显示重新登录
-export let isRelogin = { show: false }
+export let isRelogin = { show: false, token: '' }
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建axios实例
@@ -53,6 +53,7 @@ service.interceptors.request.use(config => {
     const sessionObj = cache.session.getJSON('sessionObj')
     if (sessionObj === undefined || sessionObj === null || sessionObj === '') {
       cache.session.setJSON('sessionObj', requestObj)
+      config.__repeatSubmitRequest = requestObj
     } else {
       const s_url = sessionObj.url                // 请求地址
       const s_data = sessionObj.data              // 请求数据
@@ -63,6 +64,7 @@ service.interceptors.request.use(config => {
         return Promise.reject(new Error(message))
       } else {
         cache.session.setJSON('sessionObj', requestObj)
+        config.__repeatSubmitRequest = requestObj
       }
     }
   }
@@ -74,6 +76,7 @@ service.interceptors.request.use(config => {
 
 // 响应拦截器
 service.interceptors.response.use(res => {
+    clearRepeatSubmit(res.config)
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200
     // 获取错误信息
@@ -83,18 +86,24 @@ service.interceptors.response.use(res => {
       return res.data
     }
     if (code === 401) {
+      const error = new Error('无效的会话，或者会话已过期，请重新登录。')
+      error.code = 401
+      const token = getToken() || ''
+      const requestToken = String(res.config?.headers?.Authorization || '').replace(/^Bearer\s+/i, '')
+      if (res.config?.skipAuthPrompt || (requestToken && requestToken !== token)) return Promise.reject(error)
+      if (isRelogin.token !== token) {
+        isRelogin.token = token
+        isRelogin.show = false
+      }
       if (!isRelogin.show) {
         isRelogin.show = true
         ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', { confirmButtonText: '重新登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
-          isRelogin.show = false
           useUserStore().logOut().then(() => {
             location.href = '/index'
           })
-      }).catch(() => {
-        isRelogin.show = false
-      })
-    }
-      return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+        }).catch(() => {})
+      }
+      return Promise.reject(error)
     } else if (code === 500) {
       ElMessage({ message: msg, type: 'error' })
       return Promise.reject(new Error(msg))
@@ -103,12 +112,14 @@ service.interceptors.response.use(res => {
       return Promise.reject(new Error(msg))
     } else if (code !== 200) {
       ElNotification.error({ title: msg })
-      return Promise.reject('error')
+      // Preserve backend business messages for page-level error handling.
+      return Promise.reject(new Error(msg))
     } else {
       return  Promise.resolve(res.data)
     }
   },
   error => {
+    clearRepeatSubmit(error?.config)
     console.log('err' + error)
     let { message } = error
     if (message == "Network Error") {
@@ -122,6 +133,15 @@ service.interceptors.response.use(res => {
     return Promise.reject(error)
   }
 )
+
+function clearRepeatSubmit(config) {
+  const requestObj = config?.__repeatSubmitRequest
+  if (!requestObj) return
+  const current = cache.session.getJSON('sessionObj')
+  if (current && current.url === requestObj.url && current.data === requestObj.data && current.time === requestObj.time) {
+    cache.session.remove('sessionObj')
+  }
+}
 
 // 通用下载方法
 export function download(url, params, filename, config) {

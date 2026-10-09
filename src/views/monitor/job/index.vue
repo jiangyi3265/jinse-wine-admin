@@ -315,9 +315,9 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    jobName: [{ required: true, message: "任务名称不能为空", trigger: "blur" }],
-    invokeTarget: [{ required: true, message: "调用目标字符串不能为空", trigger: "blur" }],
-    cronExpression: [{ required: true, message: "cron执行表达式不能为空", trigger: "change" }]
+    jobName: [{ required: true, message: "请输入任务名称", trigger: "blur" }],
+    invokeTarget: [{ required: true, message: "请输入调用目标字符串", trigger: "blur" }],
+    cronExpression: [{ required: true, message: "请输入 Cron 执行表达式", trigger: "change" }]
   }
 })
 

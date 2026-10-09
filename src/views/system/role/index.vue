@@ -288,9 +288,9 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
-    roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
-    roleSort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
+    roleName: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
+    roleKey: [{ required: true, message: "请输入权限字符", trigger: "blur" }],
+    roleSort: [{ required: true, message: "请输入角色顺序", trigger: "blur" }]
   },
 })
 

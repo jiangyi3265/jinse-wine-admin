@@ -8,7 +8,7 @@ import { couponTypeOptions, onOffOptions } from '../components/fields'
 
 // 金额字段在表单显示元，在接口层统一传输整数分。
 const fields = [
-  { prop: 'templateCode', label: '模板编码', search: true, table: true, required: true, maxlength: 64 },
+  { prop: 'templateCode', label: '模板编码', search: true, table: true, autoCode: true, maxlength: 64 },
   { prop: 'templateName', label: '券名称', search: true, table: true, required: true, maxlength: 128, width: 160 },
   { prop: 'couponType', label: '类型', options: couponTypeOptions, table: true, search: true, required: true, default: 'fixed' },
   { prop: 'amountCent', label: '减免金额（元）', type: 'money', table: true, default: 0 },

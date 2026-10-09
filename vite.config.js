@@ -10,7 +10,9 @@ export default defineConfig(({ mode, command }) => {
   const { VITE_APP_ENV } = env
   const appTitle = env.VITE_APP_TITLE || '金色酒业管理后台'
   const appEnv = VITE_APP_ENV || mode
-  const appBaseApi = env.VITE_APP_BASE_API || '/dev-api'
+  // Do not let a production build silently inherit the development proxy.
+  // Deployment can still override this through .env.production.
+  const appBaseApi = env.VITE_APP_BASE_API || (appEnv === 'production' ? '/prod-api' : '/dev-api')
   return {
     // 环境文件缺失时仍保持本地开发接口可用，生产环境可通过 env 覆盖。
     define: {
@@ -51,7 +53,7 @@ export default defineConfig(({ mode, command }) => {
     },
     // vite 相关配置
     server: {
-      port: 80,
+      port: 5178,
       host: true,
       open: true,
       proxy: {

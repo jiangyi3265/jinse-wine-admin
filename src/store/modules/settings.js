@@ -2,19 +2,26 @@ import defaultSettings from '@/settings'
 import { useDark, useToggle } from '@vueuse/core'
 import { useDynamicTitle } from '@/utils/dynamicTitle'
 
-const isDark = useDark()
+// 运营后台默认使用浅色工作区，保证数据表格、趋势图和状态标签在首次打开时有清晰层级。
+// 仍保留用户主动切换深色模式的能力，偏好会写入独立的后台主题存储键。
+const isDark = useDark({
+  storageKey: 'jinse-wine-admin-theme',
+  initialValue: 'light'
+})
 const toggleDark = useToggle(isDark)
 
 const { sideTheme, showSettings, navType, tagsView, tagsIcon, fixedHeader, sidebarLogo, dynamicTitle, footerVisible, footerContent } = defaultSettings
 
 const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
+const brandTheme = '#245A4A'
+const savedTheme = storageSetting.theme === '#409EFF' ? brandTheme : storageSetting.theme
 
 const useSettingsStore = defineStore(
   'settings',
   {
     state: () => ({
       title: '',
-      theme: storageSetting.theme || '#409EFF',
+      theme: savedTheme || brandTheme,
       sideTheme: storageSetting.sideTheme || sideTheme,
       showSettings: showSettings,
       navType: storageSetting.navType === undefined ? navType : storageSetting.navType,

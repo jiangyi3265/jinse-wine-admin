@@ -177,3 +177,148 @@ aside {
     margin-bottom: 10px;
   }
 }
+
+/* Product polish: keep the operations console dense, calm, and readable. */
+body {
+  background: #eef2ee;
+  color: #24372f;
+}
+
+#app {
+  --console-ink: #203c31;
+  --console-muted: #738179;
+  --console-line: #dfe7e1;
+  --console-surface: #ffffff;
+  --console-wash: #f5f8f5;
+  --console-gold: #aa7c38;
+}
+
+#app .main-container,
+#app .app-main {
+  background: #eef2ee;
+}
+
+#app .navbar {
+  height: 58px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--console-line);
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 4px 18px rgba(30, 55, 43, .05);
+}
+
+#app .navbar .hamburger-container {
+  width: 42px;
+  justify-content: center;
+  margin-right: 5px;
+  border-radius: 10px;
+}
+
+#app .navbar .right-menu .right-menu-item {
+  color: var(--console-muted);
+  border-radius: 10px;
+}
+
+#app .navbar .right-menu .avatar-container .avatar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 0;
+}
+
+#app .navbar .right-menu .avatar-container .avatar-wrapper .user-avatar {
+  width: 32px;
+  height: 32px;
+  margin-right: 0;
+  border: 2px solid #e2eadf;
+}
+
+#app .navbar .right-menu .avatar-container .avatar-wrapper .user-nickname {
+  left: auto;
+  bottom: auto;
+  color: var(--console-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#app .sidebar-container {
+  box-shadow: 4px 0 22px rgba(18, 50, 38, .12);
+}
+
+#app .sidebar-container .el-menu-item,
+#app .sidebar-container .el-sub-menu__title {
+  margin: 3px 10px;
+  border-radius: 9px;
+}
+
+#app .sidebar-container .el-menu-item.is-active {
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 #d6ab5c;
+}
+
+#app .app-container {
+  min-height: calc(100vh - 94px);
+  padding: 28px 30px 42px;
+}
+
+#app .el-card {
+  overflow: hidden;
+  border: 1px solid var(--console-line);
+  border-radius: 12px;
+  background: var(--console-surface);
+  box-shadow: 0 8px 24px rgba(30, 55, 43, .045);
+}
+
+#app .el-card__header {
+  border-bottom-color: var(--console-line);
+  color: var(--console-ink);
+  font-weight: 600;
+}
+
+#app .el-button {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+#app .el-button--primary {
+  --el-button-bg-color: #245a4a;
+  --el-button-border-color: #245a4a;
+  --el-button-hover-bg-color: #2f715d;
+  --el-button-hover-border-color: #2f715d;
+}
+
+#app .el-button--primary.is-plain {
+  --el-button-text-color: #245a4a;
+  --el-button-bg-color: #edf5f1;
+  --el-button-border-color: #a8c9ba;
+  --el-button-hover-text-color: #fff;
+  --el-button-hover-bg-color: #2f715d;
+  --el-button-hover-border-color: #2f715d;
+}
+
+#app .el-table {
+  --el-table-header-bg-color: #f4f7f4;
+  --el-table-row-hover-bg-color: #f7faf7;
+  --el-table-border-color: #e2e9e3;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+#app .el-table th.el-table__cell {
+  color: #587065;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+#app .el-tag {
+  border-radius: 999px;
+}
+
+@media (max-width: 991px) {
+  #app .app-container { padding: 18px 16px 30px; }
+}
+
+html.dark body,
+html.dark #app .main-container,
+html.dark #app .app-main {
+  background: #111b17;
+}

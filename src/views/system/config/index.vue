@@ -191,9 +191,9 @@ const data = reactive({
     configType: undefined
   },
   rules: {
-    configName: [{ required: true, message: "参数名称不能为空", trigger: "blur" }],
-    configKey: [{ required: true, message: "参数键名不能为空", trigger: "blur" }],
-    configValue: [{ required: true, message: "参数键值不能为空", trigger: "blur" }]
+    configName: [{ required: true, message: "请输入参数名称", trigger: "blur" }],
+    configKey: [{ required: true, message: "请输入参数键名", trigger: "blur" }],
+    configValue: [{ required: true, message: "请输入参数键值", trigger: "blur" }]
   }
 })
 

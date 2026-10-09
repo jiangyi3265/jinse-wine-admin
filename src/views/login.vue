@@ -1,7 +1,12 @@
 <template>
   <div class="login">
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
+      <div class="login-brand" aria-label="金色酒业">
+        <span class="brand-mark">金</span>
+        <span class="brand-name">金色酒业</span>
+      </div>
       <h3 class="title">{{ title }}</h3>
+      <p class="login-subtitle">统一管理商品、订单与门店运营</p>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -34,8 +39,8 @@
           style="width:100%;"
           @click.prevent="handleLogin"
         >
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
+          <span v-if="!loading">登录</span>
+          <span v-else>登录中...</span>
         </el-button>
         <div style="float: right;" v-if="register">
           <router-link class="link-type" :to="'/register'">立即注册</router-link>
@@ -105,7 +110,7 @@ function handleLogin() {
           }
           return acc
         }, {})
-        router.push({ path: redirect.value || "/", query: otherQueryParams })
+        router.push({ path: redirect.value || "/index", query: otherQueryParams })
       }).catch(() => {
         loading.value = false
       })
@@ -129,35 +134,106 @@ getCookie()
 
 <style lang='scss' scoped>
 .login {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   background-image: url("../assets/images/login-background.jpg");
   background-size: cover;
+  background-position: center;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 35, 28, 0.58);
+  }
+}
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-bottom: 14px;
+  color: #173c30;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #b28a4d;
+  border-radius: 50%;
+  color: #b28a4d;
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: 18px;
 }
 .title {
-  margin: 0px auto 30px auto;
+  margin: 0 auto 7px;
   text-align: center;
-  color: #707070;
+  color: #173c30;
+  font-size: 24px;
+  font-weight: 600;
+}
+.login-subtitle {
+  margin: 0 0 28px;
+  color: #7c857f;
+  font-size: 13px;
+  text-align: center;
 }
 
 .login-form {
-  border-radius: 6px;
-  background: #ffffff;
-  width: 400px;
-  padding: 25px 25px 5px 25px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  width: 420px;
+  padding: 30px 32px 12px;
   z-index: 1;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.24);
   .el-input {
-    height: 40px;
+    height: 44px;
     input {
-      height: 40px;
+      height: 44px;
     }
   }
   .input-icon {
-    height: 39px;
+    height: 42px;
     width: 14px;
     margin-left: 0px;
+  }
+  :deep(.el-input__wrapper) {
+    border-radius: 8px;
+    background: #f8faf7;
+    box-shadow: 0 0 0 1px #e5e7e2 inset;
+  }
+  :deep(.el-input__inner) {
+    color: #24372e;
+  }
+  :deep(.el-input__inner::placeholder) {
+    color: #9aa39d;
+  }
+  :deep(.el-input__prefix-inner) {
+    color: #738078;
+  }
+  :deep(.el-checkbox__label) {
+    color: #68756d;
+  }
+  :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+    border-color: #245a4a;
+    background: #245a4a;
+  }
+  :deep(.el-button--primary) {
+    border: 0;
+    border-radius: 8px;
+    background: #a47a3f;
+    box-shadow: 0 7px 16px rgba(164, 122, 63, 0.22);
+  }
+  :deep(.el-button--primary:hover) {
+    background: #8e6735;
   }
 }
 .login-tip {

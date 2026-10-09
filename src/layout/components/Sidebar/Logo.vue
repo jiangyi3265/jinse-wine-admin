@@ -2,11 +2,10 @@
   <div class="sidebar-logo-container" :class="{ 'collapse': collapse }">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo" />
-        <h1 v-else class="sidebar-title">{{ title }}</h1>
+        <span class="sidebar-brand-mark" aria-label="金色酒业">金</span>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo" />
+        <span class="sidebar-brand-mark" aria-hidden="true">金</span>
         <h1 class="sidebar-title">{{ title }}</h1>
       </router-link>
     </transition>
@@ -14,7 +13,6 @@
 </template>
 
 <script setup>
-import logo from '@/assets/logo/logo.png'
 import useSettingsStore from '@/store/modules/settings'
 import variables from '@/assets/styles/variables.module.scss'
 
@@ -74,11 +72,20 @@ const getLogoTextColor = computed(() => {
     height: 100%;
     width: 100%;
 
-    & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+    & .sidebar-brand-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      margin-right: 11px;
+      border: 1px solid #d6ab5c;
+      border-radius: 50%;
+      color: #e1bd76;
+      font-family: 'Songti SC', 'STSong', serif;
+      font-size: 18px;
+      line-height: 1;
       vertical-align: middle;
-      margin-right: 12px;
     }
 
     & .sidebar-title {
@@ -94,7 +101,7 @@ const getLogoTextColor = computed(() => {
   }
 
   &.collapse {
-    .sidebar-logo {
+    .sidebar-brand-mark {
       margin-right: 0px;
     }
   }
