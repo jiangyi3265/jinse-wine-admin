@@ -35,6 +35,10 @@ export function updateOrderDelivery(id, data) {
   return request({ url: `/business/order/${id}/delivery`, method: 'put', data })
 }
 
+export function assignOrderShippingStore(id, data) {
+  return request({ url: `/business/order/${id}/shipping-store`, method: 'put', data })
+}
+
 export function getDeliveryCompanies() {
   return request({ url: '/business/order/delivery-companies', method: 'get' })
 }

@@ -35,10 +35,11 @@
           <span v-else>{{ displayValue(field, scope.row[field.prop]) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showDetail || statusTransitions" label="操作" fixed="right" width="160" align="center">
+      <el-table-column v-if="showDetail || statusTransitions || $slots.actions" label="操作" fixed="right" :width="actionWidth" align="center">
         <template #default="scope">
           <el-button v-if="showDetail" link type="primary" icon="View" v-hasPermi="[permission('query')]" @click="openDetail(scope.row)">详情</el-button>
           <el-button v-if="statusTransitions && availableTransitions(scope.row).length" link type="primary" icon="Edit" v-hasPermi="[permission('edit')]" @click="openStatus(scope.row)">处理</el-button>
+          <slot name="actions" :row="scope.row" />
         </template>
       </el-table-column>
       <template #empty>
@@ -53,7 +54,7 @@
 
     <el-dialog v-model="detailOpen" :title="`${title}详情`" width="min(880px, 94vw)" append-to-body>
       <el-descriptions v-if="detail" :column="detailColumns" :label-width="detailColumns === 1 ? '100px' : undefined" border>
-        <el-descriptions-item v-for="field in fields" :key="field.prop" :label="field.label" :span="field.span || 1">
+        <el-descriptions-item v-for="field in detailFields" :key="field.prop" :label="field.label" :span="field.span || 1">
           <el-image v-if="field.type === 'image' && detail[field.prop]" :src="mediaUrl(detail[field.prop])" :preview-src-list="[mediaUrl(detail[field.prop])]" preview-teleported fit="cover" class="record-avatar detail-avatar"><template #error><el-icon><User /></el-icon></template></el-image>
           <el-avatar v-else-if="field.type === 'image'" :size="64" :icon="User" />
           <span v-else>{{ displayValue(field, detail[field.prop]) }}</span>
@@ -101,13 +102,15 @@ const props = defineProps({
   idField: { type: String, required: true },
   fields: { type: Array, required: true },
   showDetail: { type: Boolean, default: true },
-  statusTransitions: { type: Object, default: null }
+  statusTransitions: { type: Object, default: null },
+  actionWidth: { type: Number, default: 160 }
 })
 
 const permission = action => `business:${props.resource}:${action}`
 const { loadRelations, relationLabel } = useBusinessRelations(() => props.resource, () => props.fields)
 const searchFields = computed(() => props.fields.filter(field => field.search))
 const tableFields = computed(() => props.fields.filter(field => field.table))
+const detailFields = computed(() => props.fields.filter(field => field.detail !== false))
 const statusField = computed(() => props.fields.find(field => field.prop === 'status') || { label: '状态' })
 const query = reactive({ pageNum: 1, pageSize: 10 })
 const rows = ref([])
@@ -133,7 +136,7 @@ function updateDetailColumns() {
 }
 
 function displayValue(field, value) {
-  if (value === null || value === undefined || value === '') return '—'
+  if (value === null || value === undefined || value === '') return field.emptyLabel || '—'
   if (field.type === 'money') return `¥${(Number(value) / 100).toFixed(2)}`
   if (field.lookup) return relationLabel(field, value)
   if (field.type === 'address') {

@@ -8,7 +8,7 @@
         :background-color="getMenuBackground"
         :text-color="getMenuTextColor"
         :unique-opened="true"
-        :active-text-color="theme"
+        :active-text-color="getMenuActiveTextColor"
         :collapse-transition="false"
         mode="vertical"
         :class="sideTheme"
@@ -40,7 +40,6 @@ const permissionStore = usePermissionStore()
 const sidebarRouters = computed(() => permissionStore.sidebarRouters)
 const showLogo = computed(() => settingsStore.sidebarLogo)
 const sideTheme = computed(() => settingsStore.sideTheme)
-const theme = computed(() => settingsStore.theme)
 const isCollapse = computed(() => !appStore.sidebar.opened)
 
 // 获取菜单背景色
@@ -59,6 +58,13 @@ const getMenuTextColor = computed(() => {
   return sideTheme.value === 'theme-dark' ? variables.menuText : variables.menuLightText
 })
 
+const getMenuActiveTextColor = computed(() => {
+  if (settingsStore.isDark) {
+    return 'var(--menu-active-text)'
+  }
+  return sideTheme.value === 'theme-dark' ? variables.menuActiveText : variables.menuLightActiveText
+})
+
 const activeMenu = computed(() => {
   const { meta, path } = route
   if (meta.activeMenu) {
@@ -71,6 +77,10 @@ const activeMenu = computed(() => {
 <style lang="scss" scoped>
 .sidebar-container {
   background-color: v-bind(getMenuBackground);
+
+  :deep(.el-menu-item.is-active) {
+    color: v-bind(getMenuActiveTextColor) !important;
+  }
   
   .scrollbar-wrapper {
     background-color: v-bind(getMenuBackground);
@@ -91,7 +101,7 @@ const activeMenu = computed(() => {
       color: v-bind(getMenuTextColor);
       
       &.is-active {
-        color: var(--menu-active-text, #409eff);
+        color: v-bind(getMenuActiveTextColor);
         background-color: var(--menu-hover, rgba(0, 0, 0, 0.06)) !important;
       }
     }

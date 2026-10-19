@@ -1,11 +1,15 @@
 <template>
-  <business-records ref="recordsRef" title="订单" resource="order" id-field="orderId" :fields="fields" :status-transitions="transitions">
+  <business-records ref="recordsRef" title="订单" resource="order" id-field="orderId" :fields="fields" :status-transitions="transitions" :action-width="240">
+    <template #actions="{ row }">
+      <el-button v-if="canAssignStore(row)" link type="primary" icon="Shop" v-hasPermi="['business:order:edit']" @click="openStoreAssignment(row)">{{ row.shippingStoreId ? '调整门店' : '指定门店' }}</el-button>
+    </template>
     <template #detail="{ detail }">
       <template v-if="detail?.items?.length">
         <el-alert :title="fulfillmentMessage(detail)" :type="fulfillmentAlertType(detail)" :closable="false" class="fulfillment-alert" />
         <div v-if="detail.fulfillmentMode === 'delivery'" class="delivery-panel">
           <div class="delivery-panel-heading">
-            <div><h3>物流履约</h3><p>填写发货信息后，买家可在小程序订单详情查看物流状态。</p></div>
+            <div><h3>物流履约</h3><p>发货门店：{{ detail.shippingStoreName || (detail.status === 'paid' ? '待分配' : '未分配') }}</p></div>
+            <el-button v-if="canAssignStore(detail)" type="primary" plain icon="Shop" v-hasPermi="['business:order:edit']" @click="openStoreAssignment(detail)">{{ detail.shippingStoreId ? '调整发货门店' : '指定发货门店' }}</el-button>
             <el-button v-if="['paid', 'shipping', 'receiving'].includes(detail.status)" type="primary" plain icon="Van" v-hasPermi="['business:order:edit']" @click="openDelivery(detail)">{{ detail.delivery?.trackingNo ? '更新物流' : '填写发货信息' }}</el-button>
           </div>
           <el-descriptions v-if="detail.delivery" :column="2" border>
@@ -22,6 +26,15 @@
           </el-timeline>
           <el-empty v-if="!detail.delivery" :image-size="42" description="尚未填写物流信息" />
         </div>
+        <template v-if="detail.storeAssignments?.length">
+          <h3>发货门店分配记录</h3>
+          <el-table :data="detail.storeAssignments" border>
+            <el-table-column prop="previousStoreName" label="原门店" min-width="120"><template #default="scope">{{ scope.row.previousStoreName || '未分配' }}</template></el-table-column>
+            <el-table-column prop="storeName" label="发货门店" min-width="140" />
+            <el-table-column prop="operatorName" label="操作人" min-width="100" />
+            <el-table-column prop="createTime" label="分配时间" min-width="170" />
+          </el-table>
+        </template>
         <h3>商品明细</h3>
         <el-table :data="detail.items" border>
           <el-table-column prop="productName" label="商品" min-width="160" />
@@ -39,8 +52,19 @@
       </template>
     </template>
   </business-records>
+  <el-dialog v-model="storeAssignmentOpen" title="指定发货门店" width="min(500px, 94vw)" append-to-body :close-on-click-modal="false" :close-on-press-escape="!storeAssignmentSaving" :show-close="!storeAssignmentSaving">
+    <el-form ref="storeAssignmentRef" :model="storeAssignmentForm" :disabled="storeAssignmentSaving" label-width="100px">
+      <el-form-item label="订单号">{{ storeAssignmentTarget?.orderNo }}</el-form-item>
+      <el-form-item label="当前门店">{{ storeAssignmentTarget?.shippingStoreName || '未分配' }}</el-form-item>
+      <el-form-item label="发货门店" prop="storeId" :rules="[{ required: true, message: '请选择发货门店', trigger: 'change' }]">
+        <business-lookup v-model="storeAssignmentForm.storeId" owner="order" field="shippingStoreId" active-only placeholder="请选择发货门店" />
+      </el-form-item>
+    </el-form>
+    <template #footer><el-button :disabled="storeAssignmentSaving" @click="storeAssignmentOpen = false">取消</el-button><el-button type="primary" icon="Check" :loading="storeAssignmentSaving" @click="saveStoreAssignment">确认分配</el-button></template>
+  </el-dialog>
   <el-dialog v-model="deliveryOpen" title="填写发货信息" width="min(560px, 94vw)" append-to-body>
     <el-form ref="deliveryRef" :model="deliveryForm" :rules="deliveryRules" label-width="110px">
+      <el-form-item label="发货门店">{{ deliveryTarget?.shippingStoreName || '历史订单未分配' }}</el-form-item>
       <el-form-item label="快递公司" prop="company"><el-select v-model="deliveryForm.company" filterable allow-create default-first-option placeholder="请选择快递公司" @change="selectCompany"><el-option v-for="item in companies" :key="item.code" :label="item.name" :value="item.name" /></el-select></el-form-item>
       <el-form-item label="物流单号" prop="trackingNo"><el-input v-model.trim="deliveryForm.trackingNo" maxlength="128" placeholder="填写承运商返回的运单号" /></el-form-item>
     </el-form>
@@ -53,7 +77,8 @@
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import BusinessRecords from '../components/BusinessRecords.vue'
-import { updateOrderDelivery, getDeliveryCompanies } from '@/api/business'
+import BusinessLookup from '../components/BusinessLookup.vue'
+import { updateOrderDelivery, getDeliveryCompanies, assignOrderShippingStore, getBusiness } from '@/api/business'
 
 const statusOptions = [
   { label: '待支付', value: 'pending' },
@@ -79,6 +104,9 @@ const fields = [
   { prop: 'memberId', label: '会员', lookup: 'member', search: true, table: true },
   { prop: 'fulfillmentMode', label: '履约方式', options: [{ label: '平台配送', value: 'delivery' }, { label: '门店自提', value: 'pickup' }], search: true, table: true },
   { prop: 'pickupStoreId', label: '自提门店', lookup: 'store' },
+  { prop: 'shippingStoreId', label: '发货门店', lookup: 'store', search: true, detail: false },
+  { prop: 'storeAssignment', label: '门店分配', options: [{ label: '未分配', value: 'unassigned' }, { label: '已分配', value: 'assigned' }], search: true, detail: false },
+  { prop: 'shippingStoreName', label: '发货门店', table: true, emptyLabel: '未分配' },
   { prop: 'addressSnapshot', label: '收货地址', type: 'address', span: 2 },
   { prop: 'subtotalCent', label: '商品金额', type: 'money' },
   { prop: 'discountCent', label: '优惠金额', type: 'money' },
@@ -98,7 +126,39 @@ const deliverySaving = ref(false)
 const deliveryTarget = ref(null)
 const deliveryRef = ref()
 const companies = ref([])
-const deliveryForm = reactive({ company: '', companyCode: '', trackingNo: '', lastTrace: '' })
+const storeAssignmentOpen = ref(false)
+const storeAssignmentSaving = ref(false)
+const storeAssignmentTarget = ref(null)
+const storeAssignmentRef = ref()
+const storeAssignmentForm = reactive({ storeId: null, expectedStoreId: null })
+function canAssignStore(order) {
+  return order?.fulfillmentMode === 'delivery' && order.status === 'paid' && !order.delivery?.trackingNo && !order.delivery?.shippedAt
+}
+async function openStoreAssignment(row) {
+  try {
+    const { data } = await getBusiness('order', row.orderId)
+    if (!canAssignStore(data)) return ElMessage.warning('订单已发货或状态已变化，请刷新列表')
+    Object.assign(row, data)
+    storeAssignmentTarget.value = row
+    Object.assign(storeAssignmentForm, { storeId: data.shippingStoreId || null, expectedStoreId: data.shippingStoreId || null })
+    storeAssignmentOpen.value = true
+    storeAssignmentRef.value?.clearValidate()
+  } catch (error) { ElMessage.error(error.message || '订单信息加载失败') }
+}
+async function saveStoreAssignment() {
+  if (storeAssignmentSaving.value) return
+  try { if (!await storeAssignmentRef.value.validate()) return } catch { return }
+  storeAssignmentSaving.value = true
+  try {
+    const { data } = await assignOrderShippingStore(storeAssignmentTarget.value.orderId, { ...storeAssignmentForm })
+    Object.assign(storeAssignmentTarget.value, data)
+    storeAssignmentOpen.value = false
+    ElMessage.success('发货门店已分配')
+    await recordsRef.value?.reload()
+  } catch (error) { ElMessage.error(error.message || '发货门店分配失败') }
+  finally { storeAssignmentSaving.value = false }
+}
+const deliveryForm = reactive({ company: '', companyCode: '', trackingNo: '', lastTrace: '', expectedShippingStoreId: null })
 const deliveryRules = {
   company: [{ required: true, message: '请选择快递公司', trigger: ['blur', 'change'] }],
   trackingNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }],
@@ -131,12 +191,14 @@ function fulfillmentAlertType(detail) {
   return detail.fulfillmentMode === 'pickup' ? 'warning' : 'info'
 }
 async function openDelivery(detail) {
+  if (detail.status === 'paid' && !detail.shippingStoreId) return ElMessage.warning('请先指定发货门店')
   deliveryTarget.value = detail
   Object.assign(deliveryForm, {
     company: detail.delivery?.company || '',
     companyCode: detail.delivery?.companyCode || '',
     trackingNo: detail.delivery?.trackingNo || '',
     lastTrace: '',
+    expectedShippingStoreId: detail.shippingStoreId || null,
   })
   deliveryOpen.value = true
   try { companies.value = (await getDeliveryCompanies()).data || [] }
@@ -160,7 +222,8 @@ async function saveDelivery() {
 
 <style scoped>
 .delivery-panel { margin: 20px 0 18px; padding: 16px; border: 1px solid #e4e9e2; border-radius: 8px; background: #f8faf7; }
-.delivery-panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.delivery-panel-heading { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.delivery-panel-heading > div { flex: 1 1 240px; min-width: 0; overflow-wrap: anywhere; }
 .delivery-panel-heading h3 { margin: 0; color: #2f4138; font-size: 15px; }
 .delivery-panel-heading p { margin: 5px 0 0; color: #7a8780; font-size: 12px; }
 .delivery-timeline { margin: 18px 0 0; padding-left: 8px; }
