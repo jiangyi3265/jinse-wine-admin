@@ -110,7 +110,8 @@ const canSeeField = field => !field.permission || checkPermi([field.permission])
 const searchFields = computed(() => props.fields.filter(field => field.search && canSeeField(field)))
 const tableFields = computed(() => props.fields.filter(field => field.table && canSeeField(field)))
 const formFields = computed(() => props.fields.filter(field => field.form !== false && canSeeField(field)))
-const isFieldVisible = field => !field.showWhen || form[field.showWhen.prop] === field.showWhen.value
+const isFieldVisible = field => !field.showWhen || (Array.isArray(field.showWhen.values)
+  ? field.showWhen.values.includes(form[field.showWhen.prop]) : form[field.showWhen.prop] === field.showWhen.value)
 const visibleFormFields = computed(() => formFields.value.filter(isFieldVisible))
 const rules = computed(() => Object.fromEntries(visibleFormFields.value.filter(field => field.required && !field.autoCode).map(field => [field.prop, [field.type === 'region'
   ? { required: true, validator: (_rule, value, callback) => callback(isCompleteRegion(value) ? undefined : new Error(`请选择完整${field.label}`)), trigger: 'change' }
@@ -299,8 +300,8 @@ onBeforeUnmount(() => tableScroll?.dispose())
 .business-search :deep(.el-form-item__label) { color: var(--el-text-color-regular); font-weight: 600; }
 .business-toolbar { display: flex; align-items: center; min-height: 32px; margin-bottom: 12px; }
 .business-toolbar :deep(.top-right-btn) { margin-left: auto; }
-.business-toolbar :deep(.el-button--primary.is-plain) { color: #245a4a; border-color: #9bb9aa; background: #eef6f0; }
-.business-toolbar :deep(.el-button--primary.is-plain:hover) { color: #fff; border-color: #245a4a; background: #245a4a; }
+.business-toolbar :deep(.el-button--primary.is-plain) { color: #782d3b; border-color: #9bb9aa; background: #eef6f0; }
+.business-toolbar :deep(.el-button--primary.is-plain:hover) { color: #fff; border-color: #782d3b; background: #782d3b; }
 .business-load-error { margin: 0 0 12px; }
 .business-load-error :deep(.el-alert__content) { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .business-table { overflow: hidden; border-radius: 8px; }

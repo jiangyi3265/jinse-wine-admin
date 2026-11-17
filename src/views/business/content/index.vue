@@ -1,10 +1,17 @@
 <template>
+  <div v-if="canEditCampaign" class="campaign-toolbar"><el-button type="primary" icon="Edit" @click="campaignEditor.open()">编辑首页弹窗与活动规则</el-button></div>
   <business-crud title="小程序内容" resource="miniContent" permission-resource="pageContent" id-field="contentId" :fields="fields" />
+  <CampaignEditor ref="campaignEditor" />
 </template>
 
 <script setup>
 import BusinessCrud from '../components/BusinessCrud.vue'
+import { computed, ref } from 'vue'
+import { checkPermi } from '@/utils/permission'
+import CampaignEditor from '../components/CampaignEditor.vue'
 import { onOffOptions } from '../components/fields'
+const campaignEditor = ref()
+const canEditCampaign = computed(() => ['business:pageContent:list', 'business:pageContent:edit', 'business:pageContent:add'].every(permission => checkPermi([permission])))
 
 const contentTypeOptions = [
   { label: '活动横幅', value: 'banner' },
@@ -27,3 +34,6 @@ const fields = [
   { prop: 'status', label: '状态', options: onOffOptions, search: true, table: true, required: true, default: '0' }
 ]
 </script>
+<style scoped>
+.campaign-toolbar { padding: 20px 22px 0; background: var(--el-bg-color-page); }
+</style>

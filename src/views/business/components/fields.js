@@ -16,5 +16,6 @@ export const couponTypeOptions = [
 
 export const exchangeTypeOptions = [
   { label: '优惠券', value: 'coupon' },
-  { label: '实物礼品', value: 'goods' }
+  { label: '实物礼品', value: 'goods' },
+  { label: '电子券', value: 'voucher' }
 ]

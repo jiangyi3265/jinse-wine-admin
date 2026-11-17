@@ -2,10 +2,10 @@
   <div class="sidebar-logo-container" :class="{ 'collapse': collapse }">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <span class="sidebar-brand-mark" aria-label="金色酒业">金</span>
+        <span class="sidebar-brand-mark" aria-label="雄森酒业">雄</span>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <span class="sidebar-brand-mark" aria-hidden="true">金</span>
+        <span class="sidebar-brand-mark" aria-hidden="true">雄</span>
         <h1 class="sidebar-title">{{ title }}</h1>
       </router-link>
     </transition>
@@ -79,7 +79,7 @@ const getLogoTextColor = computed(() => {
       width: 30px;
       height: 30px;
       margin-right: 11px;
-      border: 1px solid #d6ab5c;
+      border: 1px solid #d5bc94;
       border-radius: 50%;
       color: #e1bd76;
       font-family: 'Songti SC', 'STSong', serif;

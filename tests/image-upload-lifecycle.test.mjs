@@ -96,11 +96,27 @@ test('invalid, disabled and simultaneous uploads never acquire extra locks', () 
   h.props.disabled = true
   assert.equal(h.beforeUpload(file(1)), false)
   h.props.disabled = false
-  assert.equal(h.beforeUpload({ ...file(1), size: 6 * 1024 * 1024 }), false)
+  assert.equal(h.beforeUpload({ ...file(1), size: 20 * 1024 * 1024 + 1 }), false)
   assert.equal(h.beforeUpload({ ...file(1), type: 'text/html' }), false)
   assert.equal(h.counter.value, 0)
   h.beforeUpload(file(1))
   assert.equal(h.beforeUpload(file(2)), false)
   assert.equal(h.counter.value, 1)
+  h.dispose()
+})
+
+test('images above the old limits and exactly 20 MB upload; 20 MB plus one byte is rejected', () => {
+  for (const size of [5 * 1024 * 1024 + 1, 10 * 1024 * 1024 + 1, 20 * 1024 * 1024]) {
+    const h = setup(), image = { ...file(1), size }
+    assert.equal(h.beforeUpload(image), true)
+    h.uploaded(success, image)
+    assert.deepEqual(h.events, [['update:modelValue', '/uploaded.png']])
+    assert.equal(h.counter.value, 0)
+    h.dispose()
+  }
+  const h = setup()
+  assert.equal(h.beforeUpload({ ...file(1), size: 20 * 1024 * 1024 + 1 }), false)
+  assert.deepEqual(h.messages, ['图片不能超过 20 MB'])
+  assert.equal(h.counter.value, 0)
   h.dispose()
 })

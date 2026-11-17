@@ -4,6 +4,7 @@
       <el-button v-if="canAssignStore(row)" link type="primary" icon="Shop" v-hasPermi="['business:order:edit']" @click="openStoreAssignment(row)">{{ row.shippingStoreId ? '调整门店' : '指定门店' }}</el-button>
     </template>
     <template #detail="{ detail }">
+      <el-descriptions :column="1" border style="margin-bottom:16px"><el-descriptions-item label="买家留言">{{ detail?.buyerRemark || '未填写' }}</el-descriptions-item></el-descriptions>
       <template v-if="detail?.items?.length">
         <el-alert :title="fulfillmentMessage(detail)" :type="fulfillmentAlertType(detail)" :closable="false" class="fulfillment-alert" />
         <div v-if="detail.fulfillmentMode === 'delivery'" class="delivery-panel">

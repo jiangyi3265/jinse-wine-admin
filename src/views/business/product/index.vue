@@ -1,17 +1,24 @@
 <template>
   <business-crud title="商品" resource="product" id-field="productId" :fields="fields">
     <template #row-actions="{ row }">
+      <el-button v-if="canEditPresentation" link type="primary" icon="Picture" @click="presentation.open(row)">图文详情</el-button>
       <el-button link type="primary" icon="Grid" v-hasPermi="['business:product:list']" @click="openSkus(row)">管理规格</el-button>
     </template>
   </business-crud>
+  <ProductPresentationEditor ref="presentation" />
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import { checkPermi } from '@/utils/permission'
+import ProductPresentationEditor from '../components/ProductPresentationEditor.vue'
 import BusinessCrud from '../components/BusinessCrud.vue'
 import { productStatusOptions } from '../components/fields'
 
 const router = useRouter()
+const presentation = ref()
+const canEditPresentation = computed(() => ['business:product:query', 'business:pageContent:list', 'business:pageContent:edit', 'business:pageContent:add'].every(permission => checkPermi([permission])))
 function openSkus(row) {
   router.push({ path: '/business/sku', query: { productId: row.productId } })
 }

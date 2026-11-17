@@ -9,7 +9,7 @@
       </el-upload>
       <el-button v-if="modelValue" link type="danger" :disabled="disabled || uploading" @click="emit('update:modelValue', '')">移除</el-button>
     </div>
-    <small>支持 JPG、PNG、WEBP、GIF，最大 5 MB；上传后可点击预览。</small>
+    <small>支持 JPG、PNG、WEBP、GIF，最大 {{ imageLimitMB }} MB；上传后可点击预览。</small>
   </div>
 </template>
 
@@ -24,6 +24,7 @@ const emit = defineEmits(['update:modelValue'])
 const action = `${import.meta.env.VITE_APP_BASE_API}/common/upload`
 const headers = computed(() => ({ Authorization: `Bearer ${getToken()}` }))
 const uploading = ref(false)
+const imageLimitMB = 20
 const uploader = ref()
 let activeUid = null
 let disposed = false
@@ -37,7 +38,7 @@ function beforeUpload(file) {
   if (!/\.(jpe?g|png|webp|gif)$/i.test(file.name) || !/^image\/(jpeg|png|webp|gif)$/.test(file.type)) {
     ElMessage.error('请选择 JPG、PNG、WEBP 或 GIF 图片'); return false
   }
-  if (file.size > 5 * 1024 * 1024) { ElMessage.error('图片不能超过 5 MB'); return false }
+  if (file.size > imageLimitMB * 1024 * 1024) { ElMessage.error(`图片不能超过 ${imageLimitMB} MB`); return false }
   if (uploading.value) return false
   uploading.value = true
   activeUid = file.uid
