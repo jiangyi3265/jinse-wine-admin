@@ -185,12 +185,12 @@ body {
 }
 
 #app {
-  --console-ink: #203c31;
-  --console-muted: #738179;
-  --console-line: #dfe7e1;
+  --console-ink: #232321;
+  --console-muted: #85817e;
+  --console-line: #e9e5e1;
   --console-surface: #ffffff;
-  --console-wash: #f5f8f5;
-  --console-gold: #aa7c38;
+  --console-wash: #faf9f6;
+  --console-gold: #a78d65;
 }
 
 #app .main-container,
@@ -280,31 +280,31 @@ body {
 }
 
 #app .el-button--primary {
-  --el-button-bg-color: #245a4a;
-  --el-button-border-color: #245a4a;
-  --el-button-hover-bg-color: #2f715d;
-  --el-button-hover-border-color: #2f715d;
+  --el-button-bg-color: #782d3b;
+  --el-button-border-color: #782d3b;
+  --el-button-hover-bg-color: #934655;
+  --el-button-hover-border-color: #934655;
 }
 
 #app .el-button--primary.is-plain {
-  --el-button-text-color: #245a4a;
-  --el-button-bg-color: #edf5f1;
-  --el-button-border-color: #a8c9ba;
+  --el-button-text-color: #782d3b;
+  --el-button-bg-color: #f5e9ec;
+  --el-button-border-color: #d8b1ba;
   --el-button-hover-text-color: #fff;
-  --el-button-hover-bg-color: #2f715d;
-  --el-button-hover-border-color: #2f715d;
+  --el-button-hover-bg-color: #934655;
+  --el-button-hover-border-color: #934655;
 }
 
 #app .el-table {
-  --el-table-header-bg-color: #f4f7f4;
-  --el-table-row-hover-bg-color: #f7faf7;
-  --el-table-border-color: #e2e9e3;
+  --el-table-header-bg-color: #f1efeb;
+  --el-table-row-hover-bg-color: #faf9f6;
+  --el-table-border-color: #e9e5e1;
   border-radius: 9px;
   overflow: hidden;
 }
 
 #app .el-table th.el-table__cell {
-  color: #587065;
+  color: #6b625b;
   font-size: 12px;
   font-weight: 600;
 }

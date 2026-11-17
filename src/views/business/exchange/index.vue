@@ -14,7 +14,7 @@ const fields = [
   { prop: 'couponTemplateId', label: '券模板', lookup: 'couponTemplate', lookupId: 'couponTemplateId', lookupLabel: 'templateName', required: true, showWhen: { prop: 'itemType', value: 'coupon' } },
   { prop: 'spec', label: '规格说明', maxlength: 128 },
   { prop: 'imageUrl', type: 'image', label: '图片', maxlength: 512 },
-  { prop: 'redeemStoreId', label: '指定兑换门店', lookup: 'store', lookupId: 'storeId', lookupLabel: 'storeName', table: true, width: 170, showWhen: { prop: 'itemType', value: 'goods' } },
+  { prop: 'redeemStoreId', label: '指定核销点', lookup: 'store', lookupId: 'storeId', lookupLabel: 'storeName', table: true, width: 170, showWhen: { prop: 'itemType', values: ['goods', 'voucher'] } },
   { prop: 'points', label: '所需积分', type: 'number', table: true, required: true, min: 1 },
   { prop: 'stock', label: '库存（-1不限）', type: 'number', table: true, required: true, min: -1, default: 0 },
   { prop: 'perUserLimit', label: '每人上限', type: 'number', min: 1, default: 1 },

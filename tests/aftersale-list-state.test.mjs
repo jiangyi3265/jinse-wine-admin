@@ -5,7 +5,12 @@ import { reactive, ref } from 'vue'
 import { parse } from '@vue/compiler-sfc'
 
 const source = readFileSync(new URL('../src/views/business/components/OrderAftersalePanel.vue', import.meta.url), 'utf8')
-const script = parse(source).descriptor.scriptSetup.content.replace(/^import .*$/gm, '')
+// The component reads import.meta.env (Vite-only). The harness evaluates the script with new Function,
+// where import.meta is a syntax error, so route that read through a parameter with the same value.
+const script = parse(source).descriptor.scriptSetup.content
+  .replace(/^import .*$/gm, '')
+  .replace(/import\.meta\.env/g, '__importMetaEnv')
+const importMetaEnv = { VITE_APP_BASE_API: '/dev-api' }
 const tick = () => new Promise(resolve => setImmediate(resolve))
 const deferred = () => { let resolve, reject; const promise = new Promise((a, b) => { resolve = a; reject = b }); return { promise, resolve, reject } }
 function setup(overrides = {}) {
@@ -13,12 +18,13 @@ function setup(overrides = {}) {
   const list = overrides.list || (async () => ({ rows: [{ id: 1 }], total: 41 }))
   const detail = overrides.detail || (async id => ({ id, quantity: 2, status: 'returning' }))
   const act = overrides.act || (async (id, action, data) => ({ id, ...data, status: 'received' }))
-  const component = new Function('reactive', 'ref', 'onMounted', 'onBeforeUnmount', 'defineEmits', 'ElMessage', 'ElMessageBox', 'listAftersales', 'getAftersale', 'actAftersale',
+  const component = new Function('reactive', 'ref', 'onMounted', 'onBeforeUnmount', 'defineEmits', 'ElMessage', 'ElMessageBox', 'listAftersales', 'getAftersale', 'actAftersale', '__importMetaEnv',
     script + '\nreturn { load, search, reset, open, act, inspect, query, pageNum, pageSize, rows, total, error, loading, detail, busy, receipt, receiptRef };'
   )(reactive, ref, () => {}, fn => cleanup.push(fn), () => () => {},
     { success: v => messages.push(v), error: v => messages.push(v) }, { confirm: async () => true },
     params => { calls.push({ ...params }); return list(params) }, detail,
-    (id, action, data) => { actions.push({ id, action, data }); return act(id, action, data) })
+    (id, action, data) => { actions.push({ id, action, data }); return act(id, action, data) },
+    importMetaEnv)
   return { ...component, calls, actions, messages, dispose: () => cleanup.forEach(fn => fn()) }
 }
 

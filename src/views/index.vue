@@ -2,7 +2,7 @@
   <div v-loading="loading" class="home-page">
     <header class="home-header">
       <div class="header-copy">
-        <p class="workspace-label">金色酒业 / 工作台</p>
+        <p class="workspace-label">雄森酒业 / 工作台</p>
         <h1>{{ greeting }}，{{ userStore.nickName || userStore.name || '工作人员' }}</h1>
         <div class="role-line">
           <el-tag v-for="role in roleLabels" :key="role" effect="plain" size="small">{{ role }}</el-tag>
@@ -79,6 +79,7 @@ const routeEntries = [
   { path: '/business/coupon', permission: 'business:couponTemplate:list', title: '优惠券管理', icon: 'money', description: '配置优惠券发放规则' },
   { path: '/business/exchange', permission: 'business:exchangeItem:list', title: '积分兑换', icon: 'star', description: '管理积分兑换商品' },
   { path: '/business/brand', permission: 'business:brand:query', title: '品牌配置', icon: 'edit', description: '维护小程序品牌配置' },
+  { path: '/business/content', permission: 'business:pageContent:list', title: '小程序内容', icon: 'documentation', description: '维护首页弹窗、活动规则与图文内容' },
 ]
 const statItems = [
   { key: 'orders', label: '订单总数', icon: 'shopping', tone: 'green', hint: '累计订单', path: '/business/order', permission: 'business:order:list' },
@@ -168,7 +169,7 @@ onMounted(() => {
 }
 .header-copy { min-width: 0; }
 .workspace-label { margin: 0 0 8px; color: #8b632f; font-size: 12px; font-weight: 650; }
-.home-header h1 { margin: 0; color: #183b2e; font-size: 24px; line-height: 1.35; }
+.home-header h1 { margin: 0; color: #232321; font-size: 24px; line-height: 1.35; }
 .role-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .today-label { color: #67766c; font-size: 12px; }
 .header-action { flex: none; }
@@ -190,7 +191,7 @@ onMounted(() => {
   border: 1px solid #dce5df;
   border-radius: 6px;
   background: #fff;
-  color: #183b2e;
+  color: #232321;
   text-align: left;
   box-shadow: none;
   cursor: pointer;
@@ -198,7 +199,7 @@ onMounted(() => {
 .metric-card:hover, .module-card:hover { border-color: #ad8249; }
 .metric-icon, .module-icon, .attention-icon { display: grid; flex: none; place-items: center; border-radius: 6px; }
 .metric-icon { width: 34px; height: 34px; font-size: 17px; }
-.metric-green { color: #28624f; background: #edf3ed; }
+.metric-green { color: #782d3b; background: #f3e9eb; }
 .metric-gold { color: #9a6d2f; background: #faf2e5; }
 .metric-blue { color: #3d6d89; background: #edf4f8; }
 .metric-purple { color: #6f5a86; background: #f2edf7; }
@@ -213,7 +214,7 @@ onMounted(() => {
 .home-side { display: block; border-left: 1px solid #dce5df; padding-left: 22px; }
 .content-section { padding: 0; border: 0; border-radius: 0; background: transparent; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
-.section-heading h2 { margin: 0; color: #183b2e; font-size: 17px; }
+.section-heading h2 { margin: 0; color: #232321; font-size: 17px; }
 .module-count { color: #68766d; font-size: 12px; white-space: nowrap; }
 .module-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .module-card {
@@ -225,15 +226,15 @@ onMounted(() => {
   border: 1px solid #dce5df;
   border-radius: 6px;
   background: #fff;
-  color: #183b2e;
+  color: #232321;
   text-align: left;
   box-shadow: none;
   cursor: pointer;
 }
 .module-card strong { overflow: hidden; margin-left: 11px; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
-.module-icon { flex-basis: 32px; width: 32px; height: 32px; background: #edf3ed; color: #28624f; font-size: 17px; }
+.module-icon { flex-basis: 32px; width: 32px; height: 32px; background: #f3e9eb; color: #782d3b; font-size: 17px; }
 .empty-access { padding: 24px; color: #68766d; text-align: center; }
-.empty-access strong { display: block; margin-top: 8px; color: #294538; }
+.empty-access strong { display: block; margin-top: 8px; color: #514c48; }
 .empty-access p { margin: 6px 0 0; font-size: 12px; }
 .attention-section { padding: 0; }
 .attention-list { border-top: 1px solid #dce5df; }
@@ -248,13 +249,13 @@ onMounted(() => {
   border-bottom: 1px solid #dce5df;
   border-radius: 0;
   background: transparent;
-  color: #294538;
+  color: #514c48;
   text-align: left;
   cursor: pointer;
 }
 .attention-item:hover { border-color: #dce5df; background: #edf3ef; }
-.attention-item strong { color: #294538; font-size: 13px; }
-.attention-icon { flex-basis: 28px; width: 28px; height: 28px; background: #edf3ed; color: #28624f; }
+.attention-item strong { color: #514c48; font-size: 13px; }
+.attention-icon { flex-basis: 28px; width: 28px; height: 28px; background: #f3e9eb; color: #782d3b; }
 @media (max-width: 1100px) {
   .metric-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }

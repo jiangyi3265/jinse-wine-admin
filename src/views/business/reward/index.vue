@@ -9,7 +9,8 @@ const typeOptions = [
   { label: '现金红包', value: 'cash' },
   { label: '积分', value: 'points' },
   { label: '优惠券', value: 'coupon' },
-  { label: '实物礼品', value: 'goods' }
+  { label: '实物礼品', value: 'goods' },
+  { label: '电子券', value: 'voucher' }
 ]
 const statusOptions = [
   { label: '待处理', value: 'pending' },

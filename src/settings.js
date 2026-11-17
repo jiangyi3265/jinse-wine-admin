@@ -52,6 +52,6 @@ export default {
   /**
    * 底部版权文本内容
    */
-  footerContent: 'Copyright © 2026 金色酒业. All Rights Reserved.'
+  footerContent: 'Copyright © 2026 雄森酒业. All Rights Reserved.'
 }
 

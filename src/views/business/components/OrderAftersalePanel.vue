@@ -40,6 +40,7 @@
           <el-descriptions-item label="换货物流" :span="2">{{ detail.replacementCompany || '—' }} {{ detail.replacementTrackingNo }}</el-descriptions-item>
           <el-descriptions-item v-if="detail.receivedAt" label="收货凭证" :span="2">{{ detail.receiptReference || '历史记录未登记' }}</el-descriptions-item>
         </el-descriptions>
+        <div v-if="detail.images?.length" style="display:flex;gap:12px;margin:16px 0"><el-image v-for="src in detail.images" :key="src" :src="evidenceUrl(src)" :preview-src-list="detail.images.map(evidenceUrl)" preview-teleported fit="cover" style="width:100px;height:100px;border-radius:8px" /></div>
         <el-form v-if="detail.status === 'pending'" ref="reviewRef" :model="review" :rules="reviewRules" label-width="100px" class="aftersale-form" :disabled="busy">
           <el-form-item label="审核结果" prop="status"><el-radio-group v-model="review.status"><el-radio value="approved">同意</el-radio><el-radio value="rejected">驳回</el-radio></el-radio-group></el-form-item>
           <el-form-item label="处理说明" prop="note"><el-input v-model="review.note" type="textarea" maxlength="500" show-word-limit /></el-form-item>
@@ -64,6 +65,8 @@
   </section>
 </template>
 <script setup>
+function evidenceUrl(src) { return src?.startsWith('/') ? `${import.meta.env.VITE_APP_BASE_API}${src}` : src }
+
 import { onMounted, onBeforeUnmount, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Refresh, Search } from '@element-plus/icons-vue'

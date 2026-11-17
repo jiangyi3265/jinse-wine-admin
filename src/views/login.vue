@@ -1,9 +1,9 @@
 <template>
   <div class="login">
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
-      <div class="login-brand" aria-label="金色酒业">
-        <span class="brand-mark">金</span>
-        <span class="brand-name">金色酒业</span>
+      <div class="login-brand" aria-label="雄森酒业">
+        <span class="brand-mark">雄</span>
+        <span class="brand-name">雄森酒业</span>
       </div>
       <h3 class="title">{{ title }}</h3>
       <p class="login-subtitle">统一管理商品、订单与门店运营</p>
@@ -155,7 +155,7 @@ getCookie()
   justify-content: center;
   gap: 9px;
   margin-bottom: 14px;
-  color: #173c30;
+  color: #232321;
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -175,7 +175,7 @@ getCookie()
 .title {
   margin: 0 auto 7px;
   text-align: center;
-  color: #173c30;
+  color: #232321;
   font-size: 24px;
   font-weight: 600;
 }
@@ -211,7 +211,7 @@ getCookie()
     box-shadow: 0 0 0 1px #e5e7e2 inset;
   }
   :deep(.el-input__inner) {
-    color: #24372e;
+    color: #232321;
   }
   :deep(.el-input__inner::placeholder) {
     color: #9aa39d;
@@ -223,8 +223,8 @@ getCookie()
     color: #68756d;
   }
   :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
-    border-color: #245a4a;
-    background: #245a4a;
+    border-color: #782d3b;
+    background: #782d3b;
   }
   :deep(.el-button--primary) {
     border: 0;

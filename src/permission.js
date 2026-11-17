@@ -20,11 +20,6 @@ const isWhiteList = (path) => {
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
-    if (/^\/business\/(content|miniContent)(\/|$)/.test(to.path)) {
-      next({ path: '/index', replace: true })
-      NProgress.done()
-      return
-    }
     to.meta.title && useSettingsStore().setTitle(to.meta.title)
     /* has token*/
     if (to.path === '/login') {
